@@ -33,7 +33,7 @@ Este proyecto es un administrador de red básico desarrollado en Python. Permite
 - **Mapeo de red**: Identifica todos los dispositivos conectados en una red, mostrando sus direcciones IP, direcciones MAC y, si es posible, el fabricante del dispositivo.
 
 ## Exportacion a JSON
-- Los datos del escaneo serán guardados en formato JSON en la carpeta ´results´ con toda la información
+- Los datos del escaneo serán guardados en formato JSON en la carpeta "results" con toda la información
 
 ## Requisitos
 
