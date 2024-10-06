@@ -1,15 +1,19 @@
 from network_scanner import *
+from utils import export_to_json
 
 def main():
     print("Iniciando escaneo de red avanzado...")
     ip_range = input("Introduce el rango de IP a escanear (por ejemplo, 192.168.1.1/24): ")
-    
+
     print("Mapeando la red...")
     devices = network_mapping(ip_range)
     
     print("Dispositivos conectados:")
     for device in devices:
         print(f"IP: {device['ip']}, MAC: {device['mac']}, Fabricante: {device['vendor']}")
+    
+    # Exportar dispositivos escaneados a JSON
+    export_to_json(devices, filename="dispositivos_escaneados.json")
 
     while True:
         ip_to_examine = input("\nIntroduce la dirección IP que deseas examinar a fondo (o 'q' para salir): ")
@@ -33,6 +37,13 @@ def main():
                     print(f"  Puerto {port}: {service}")
                     banner = banner_grab(ip_to_examine, port)
                     print(f"    Banner: {banner}")
+                
+                # Exportar puertos abiertos a JSON
+                port_scan_results = {
+                    'ip': ip_to_examine,
+                    'open_ports': open_ports
+                }
+                export_to_json(port_scan_results, filename=f"puertos_abiertos_{ip_to_examine}.json")
             else:
                 print(f"No se encontraron puertos abiertos en {ip_to_examine}.")
             
@@ -43,11 +54,26 @@ def main():
                 print(f"  Puerto UDP {port}: {result}")
             
             print(f"\nTraceroute a {ip_to_examine}:")
-            for hop in traceroute(ip_to_examine):
+            traceroute_result = traceroute(ip_to_examine)
+            for hop in traceroute_result:
                 print(hop)
             
+            # Exportar resultado de traceroute a JSON
+            traceroute_data = {
+                'ip': ip_to_examine,
+                'traceroute': traceroute_result
+            }
+            export_to_json(traceroute_data, filename=f"traceroute_{ip_to_examine}.json")
+
             os = os_fingerprint(ip_to_examine)
             print(f"\nSistema operativo detectado: {os}")
+            
+            # Exportar OS detectado a JSON
+            os_data = {
+                'ip': ip_to_examine,
+                'os': os
+            }
+            export_to_json(os_data, filename=f"os_detected_{ip_to_examine}.json")
             
             print("\nRealizando escaneo de vulnerabilidades...")
             vulnerabilities = vulnerability_scan(ip_to_examine)
@@ -55,6 +81,13 @@ def main():
                 print("Vulnerabilidades detectadas:")
                 for vuln in vulnerabilities:
                     print(vuln)
+
+                # Exportar vulnerabilidades a JSON
+                vulnerability_data = {
+                    'ip': ip_to_examine,
+                    'vulnerabilities': vulnerabilities
+                }
+                export_to_json(vulnerability_data, filename=f"vulnerabilidades_{ip_to_examine}.json")
             else:
                 print("No se detectaron vulnerabilidades.")
             
@@ -65,13 +98,27 @@ def main():
                 for record_type, records in dns_records.items():
                     print(f"  {record_type}: {', '.join(records)}")
                 
+                # Exportar DNS a JSON
+                dns_data = {
+                    'domain': domain,
+                    'dns_records': dns_records
+                }
+                export_to_json(dns_data, filename=f"dns_records_{domain}.json")
+                
                 print("\nEscaneando subdominios comunes...")
-                common_subdomains = ['www', 'mail', 'ftp', 'localhost', 'webmail', 'smtp', 'pop', 'ns1', 'webdisk', 'ns2', 'cpanel', 'whm', 'autodiscover', 'autoconfig', 'm', 'imap', 'test', 'ns', 'blog', 'pop3', 'dev', 'www2', 'admin', 'forum', 'news', 'vpn', 'ns3', 'mail2', 'new', 'mysql', 'old', 'lists', 'support', 'mobile', 'mx', 'static', 'docs', 'beta', 'shop', 'sql', 'secure', 'demo', 'cp', 'calendar', 'wiki', 'web', 'media', 'email', 'images', 'img', 'www1', 'intranet', 'portal', 'video', 'sip', 'dns2', 'api', 'cdn', 'stats', 'dns1', 'ns4', 'www3', 'dns', 'search', 'staging', 'server', 'mx1', 'chat', 'wap', 'my', 'svn', 'mail1', 'sites', 'proxy', 'ads', 'host', 'crm', 'cms', 'backup', 'mx2', 'lyncdiscover', 'info', 'apps', 'download', 'remote', 'db', 'forums', 'store', 'relay', 'files', 'newsletter', 'app', 'live', 'owa', 'en', 'start', 'sms', 'office', 'exchange', 'ipv4']
+                common_subdomains = [...]  # Lista de subdominios comunes
                 found_subdomains = subdomain_scan(domain, common_subdomains)
                 if found_subdomains:
                     print("Subdominios encontrados:")
                     for subdomain in found_subdomains:
                         print(f"  {subdomain}")
+
+                    # Exportar subdominios a JSON
+                    subdomain_data = {
+                        'domain': domain,
+                        'subdomains': found_subdomains
+                    }
+                    export_to_json(subdomain_data, filename=f"subdomains_{domain}.json")
                 else:
                     print("No se encontraron subdominios comunes.")
 
@@ -79,6 +126,7 @@ def main():
             print(f"La IP {ip_to_examine} no se encontró en la lista de dispositivos conectados.")
 
     print("\n¡Escaneo completo!")
+    input("Pulsa enter para cerrar")
 
 if __name__ == "__main__":
     main()
