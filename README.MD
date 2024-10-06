@@ -2,7 +2,7 @@
 
 Este proyecto es un administrador de red básico desarrollado en Python. Permite escanear dispositivos conectados en una red local, realizar ping a esos dispositivos, escanear puertos abiertos y realizar un traceroute. Es una herramienta útil para administradores de red y entusiastas que desean monitorear su red local.
 
-# Funcionalidades Generales
+## Funcionalidades Generales
 
 - **Escaneo de dispositivos conectados**: Descubre todos los dispositivos conectados en una red local.
 
@@ -31,6 +31,9 @@ Este proyecto es un administrador de red básico desarrollado en Python. Permite
 - **Escaneo paralelo de puertos**: Realiza un escaneo simultáneo de varios puertos en un dispositivo, mejorando la eficiencia del escaneo al ejecutar múltiples pruebas en paralelo.
 
 - **Mapeo de red**: Identifica todos los dispositivos conectados en una red, mostrando sus direcciones IP, direcciones MAC y, si es posible, el fabricante del dispositivo.
+
+## Exportacion a JSON
+- Los datos del escaneo serán guardados en formato JSON en la carpeta ´results´ con toda la información
 
 ## Requisitos
 
