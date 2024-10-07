@@ -7,6 +7,7 @@ import dns.resolver
 import requests
 from concurrent.futures import ThreadPoolExecutor
 
+
 def scan(ip_range):
     arp_request = scapy.ARP(pdst=ip_range)
     broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
@@ -19,6 +20,7 @@ def scan(ip_range):
         devices.append(device_info)
     
     return devices
+
 
 def scan_ports(ip, port_range='1-1024'):
     nm = nmap.PortScanner()
@@ -33,16 +35,19 @@ def scan_ports(ip, port_range='1-1024'):
     
     return open_ports
 
+
 def ping(ip):
     try:
         output = subprocess.check_output(['ping', '-c', '1', ip], stderr=subprocess.STDOUT, universal_newlines=True)
         return "1 received" in output
     except subprocess.CalledProcessError:
         return False
-    
+
+
 def traceroute(ip):
     output = subprocess.check_output(['tracert', ip], stderr=subprocess.STDOUT, universal_newlines=True)
     return output.splitlines()
+
 
 def os_fingerprint(ip):
     nm = nmap.PortScanner()
@@ -51,6 +56,7 @@ def os_fingerprint(ip):
         return nm[ip]['osmatch'][0]['name']
     else:
         return "OS no detectado"
+
 
 def syn_scan(ip, port):
     src_port = scapy.RandShort()
@@ -64,6 +70,7 @@ def syn_scan(ip, port):
             return "Cerrado"
     return "Desconocido"
 
+
 def banner_grab(ip, port):
     try:
         socket.setdefaulttimeout(2)
@@ -74,6 +81,7 @@ def banner_grab(ip, port):
         return banner
     except:
         return "No se pudo obtener el banner"
+
 
 def vulnerability_scan(ip):
     nm = nmap.PortScanner()
@@ -87,6 +95,7 @@ def vulnerability_scan(ip):
                     vulnerabilities.extend(nm[host][proto][port]['script'])
     return vulnerabilities
 
+
 def udp_scan(ip, port):
     resp = scapy.sr1(IP(dst=ip)/UDP(dport=port), timeout=2, verbose=False)
     if resp is None:
@@ -99,6 +108,7 @@ def udp_scan(ip, port):
     else:
         return "Abierto"
 
+
 def dns_enumeration(domain):
     record_types = ['A', 'AAAA', 'CNAME', 'MX', 'NS', 'TXT', 'SOA']
     results = {}
@@ -109,6 +119,7 @@ def dns_enumeration(domain):
         except:
             results[record] = []
     return results
+
 
 def subdomain_scan(domain, wordlist):
     found_subdomains = []
@@ -121,12 +132,14 @@ def subdomain_scan(domain, wordlist):
             pass
     return found_subdomains
 
+
 def service_version_scan(ip, port):
     nm = nmap.PortScanner()
     nm.scan(ip, str(port), arguments="-sV")
     if ip in nm.all_hosts() and 'tcp' in nm[ip] and port in nm[ip]['tcp']:
         return nm[ip]['tcp'][port]['product'] + " " + nm[ip]['tcp'][port]['version']
     return "Versión desconocida"
+
 
 def parallel_port_scan(ip, ports):
     open_ports = []
@@ -136,6 +149,7 @@ def parallel_port_scan(ip, ports):
             if status == "Abierto":
                 open_ports.append(port)
     return open_ports
+
 
 def network_mapping(ip_range):
     nm = nmap.PortScanner()
