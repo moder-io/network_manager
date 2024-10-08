@@ -1,5 +1,5 @@
 from network_scanner import *
-from utils import export_to_json
+from utils import *
 
 def main():
     print("Iniciando escaneo de red avanzado...")
@@ -124,6 +124,14 @@ def main():
 
         else:
             print(f"La IP {ip_to_examine} no se encontró en la lista de dispositivos conectados.")
+    
+    initiate_report = input("\n¿Deseas generar un reporte ('y' para aceptar)? ")
+    if initiate_report.lower() == 'y':
+        report_filename = "network_scan_report.txt"
+        generate_report(devices, report_filename)
+        print(f"Reporte generado en {report_filename}")
+        formatted_results = format_scan_results(devices)
+        print(formatted_results)
 
     print("\n¡Escaneo completo!")
     input("Pulsa enter para cerrar")
