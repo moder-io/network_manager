@@ -12,7 +12,6 @@ def main():
     for device in devices:
         print(f"IP: {device['ip']}, MAC: {device['mac']}, Fabricante: {device['vendor']}")
     
-    # Exportar dispositivos escaneados a JSON
     export_to_json(devices, filename="dispositivos_escaneados.json")
 
     while True:
@@ -38,7 +37,6 @@ def main():
                     banner = banner_grab(ip_to_examine, port)
                     print(f"    Banner: {banner}")
                 
-                # Exportar puertos abiertos a JSON
                 port_scan_results = {
                     'ip': ip_to_examine,
                     'open_ports': open_ports
@@ -57,8 +55,7 @@ def main():
             traceroute_result = traceroute(ip_to_examine)
             for hop in traceroute_result:
                 print(hop)
-            
-            # Exportar resultado de traceroute a JSON
+
             traceroute_data = {
                 'ip': ip_to_examine,
                 'traceroute': traceroute_result
@@ -67,8 +64,7 @@ def main():
 
             os = os_fingerprint(ip_to_examine)
             print(f"\nSistema operativo detectado: {os}")
-            
-            # Exportar OS detectado a JSON
+
             os_data = {
                 'ip': ip_to_examine,
                 'os': os
@@ -82,7 +78,6 @@ def main():
                 for vuln in vulnerabilities:
                     print(vuln)
 
-                # Exportar vulnerabilidades a JSON
                 vulnerability_data = {
                     'ip': ip_to_examine,
                     'vulnerabilities': vulnerabilities
@@ -97,8 +92,7 @@ def main():
                 dns_records = dns_enumeration(domain)
                 for record_type, records in dns_records.items():
                     print(f"  {record_type}: {', '.join(records)}")
-                
-                # Exportar DNS a JSON
+
                 dns_data = {
                     'domain': domain,
                     'dns_records': dns_records
@@ -106,14 +100,13 @@ def main():
                 export_to_json(dns_data, filename=f"dns_records_{domain}.json")
                 
                 print("\nEscaneando subdominios comunes...")
-                common_subdomains = [...]  # Lista de subdominios comunes
+                common_subdomains = [...]
                 found_subdomains = subdomain_scan(domain, common_subdomains)
                 if found_subdomains:
                     print("Subdominios encontrados:")
                     for subdomain in found_subdomains:
                         print(f"  {subdomain}")
 
-                    # Exportar subdominios a JSON
                     subdomain_data = {
                         'domain': domain,
                         'subdomains': found_subdomains
