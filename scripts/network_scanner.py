@@ -22,7 +22,7 @@ def scan(ip_range):
     return devices
 
 
-def scan_ports(ip, port_range='1-1024'):
+def scan_ports(ip, port_range='1-8080'):
     nm = nmap.PortScanner()
     nm.scan(ip, port_range)
     open_ports = []
