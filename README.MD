@@ -38,8 +38,8 @@ Este proyecto es un administrador de red básico desarrollado en Python. Permite
 ## Requisitos
 
 - Python 3.6 o superior
-- Npcap si estas en windows:
-  - `https://npcap.com/#download`
+- Npcap y Nmap:
+  - `https://nmap.org/download.html`
 - Dependencias listadas en:
   - `requirements.txt`
 
